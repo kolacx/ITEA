@@ -1,0 +1,174 @@
+Start
+
+Структуры данных
+
+Список
+    Имеет индекс
+    list_1 = [1,2,3,4,5]
+
+    list[index_element]
+
+    list_2 = list()
+    list() - принемает 1 аргумент [1,2,3,4,5]
+
+    chenge 
+
+    list_1[0] = 'zerro'
+
+
+Кортеж
+    От списка отличается тем что в кортеже нельзя изменять данные
+
+    tuple_1 = (1,2,3,4,5)
+    tuple_1[index_element]
+
+    tuple_1[0] = 'qwe' - ! nel'zya
+
+    tuple = 1,2,3,4 - Так тоже можно
+
+    tuple = 1,
+
+
+Словарь
+    Значения хранятся по ключам.
+
+    dict_1 = {
+        'key' : value,
+    }
+
+    dict['key']
+
+
+    dict_2 = {
+        'one' : 1.
+        'two' : 2,
+        (1, 2) : 3, print(dist_2[(1,2)])
+        [1,2] : 4, - так нельзя
+    }
+
+
+    dict_1.get('ten', None) - return None
+
+
+hash - hash('asd') - 123123123123 Получится какойто хеш
+
+
+
+
+bool - Возвращает Волс если чтото пустое Строка, кортеж и тд
+
+
+user_string = input('some_string')
+
+if user_string != '': - if user_string:
+    print(user_string[::-1]) - переварачивает строку
+else:
+    print('empty')
+
+
+if and nadn and
+
+if all(['abs', 10]): - and and and
+if any(['asd', 10]) - or or or
+
+
+
+number = int(input('num'))
+
+if number > 100:
+    print ('more 100')
+
+else:
+    print('xz')
+
+=
+
+result = 'more 100' if number > 100 else 'idk'
+
+
+
+None - может быть только один
+
+
+
+is 
+
+a = 1
+
+id(a) - уникальный идентификатор
+
+is сравнивает по id
+
+a = [1,2,3]
+id(a) 
+
+a == [1,2,3] - True
+
+a is [1,2,3] - False
+
+is - работает не всегда коректно
+
+
+i = 0
+
+while i < 100:
+    print(i)
+    i += 1
+
+    if i == 50:
+    break - Завершайт while
+    continue - Останавливает участок кода переходит на следующий шаг
+
+
+
+enumerate(obj) - возвращает кортеж - Если хотим узнать индекс
+
+что возвращает range
+
+что возвращает?
+
+итерированый обьект
+
+Итератор или гениратор? - Не то и не ето.
+
+
+dict = {
+    ...
+}
+
+.keys()
+dict.values()
+.items() - Возвращает кортежи
+
+for k, v in dict.items():
+    print(k, v)
+
+a, b = b, a - Korteg
+
+
+(a, b) = (10, 20) - Распаковка кортежа
+
+
+
+исключения
+
+
+
+КОртеж из исключений
+except (sdf,sdf)
+
+except (asd,asd) as e:
+    print(e.args)
+
+    e.type - Тип исключения ZeroDevision
+
+
+finally: - ыполнится в любом случае
+
+else - когда except не отработал
+
+except Exception as e: - ловит все питоновские ошибки
+except BaseException as e: - ловит все ошибки
+
+Свои исключения
+raise Except('error')
