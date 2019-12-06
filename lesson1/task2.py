@@ -4,7 +4,7 @@ country = {
     'EU' : 'Eureop'
 }
 
-q = ('UA', 'RU', 'GR')
+q = ['UA', 'RU', 'GR']
 
 for item in q:
 
