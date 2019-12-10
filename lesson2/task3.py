@@ -35,8 +35,10 @@ class Dots:
     def __div__ (dot1, dot2):
         return Dots(dot1._x / dot2._x, dot1._y / dot2._y, dot1._z / dot2._z)
 
-    # def __pos__ (dit1, dot2):
-    #     return Dots()
+    def __neg__(obj):
+        obj.set_x(-obj.get_x())
+        obj.set_y(-obj.get_y())
+        obj.set_z(-obj.get_z())
 
 dot1 = Dots(1,2,3)
 
@@ -48,4 +50,8 @@ print(dot3.get_x())
 print(dot3.get_y())
 print(dot3.get_z())
 
-dot1 += dot2
+-dot1
+
+print(dot1.get_x())
+print(dot1.get_y())
+print(dot1.get_z())
