@@ -32,7 +32,7 @@ class Dots:
     def __sub__ (dot1, dot2):
         return Dots(dot1._x - dot2._x, dot1._y - dot2._y, dot1._z - dot2._z)
 
-    def __div__ (dot1, dot2):
+    def __truediv__ (dot1, dot2):
         return Dots(dot1._x / dot2._x, dot1._y / dot2._y, dot1._z / dot2._z)
 
     def __neg__(obj):
