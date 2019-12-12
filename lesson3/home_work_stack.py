@@ -11,12 +11,15 @@ class Stack:
     def pop(self):
         return self.items.pop()
 
+    def size(self):
+        return len(self.items)
+
 
 s = Stack()
 
 s.push('a')
 s.push('b')
 
-print(s.isEmpty())
-print(s.size())
-print(s.peek())
+print('isEmpty ', s.isEmpty())
+print('Size ', s.size())
+print('Pop ', s.pop())

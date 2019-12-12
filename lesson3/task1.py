@@ -35,5 +35,5 @@ def my_func(number):
 
     return sum_number
 
-my_func(3)
+my_func(10)
 
