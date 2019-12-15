@@ -5,13 +5,13 @@ def decorator(num_of_iterations):
     time_start = time.time()
     def decorator_in(func):
     
-        def wrapper(number):
+        def wrapper(*args):
             print('Wrapper start')
 
             result = []
 
             for i in range(num_of_iterations):
-                result.append(func(number))
+                result.append(func(*args))
 
             print(f'Wrapt result is {result}')
             print('Wrapper end')
@@ -28,12 +28,20 @@ def decorator(num_of_iterations):
 
 
 @decorator(4)
-def my_func(number):
-    sum_number = 0 
-    for i in range(number):
-        sum_number += i
+def my_func(*args):
+    
+    result = []
+    for item in args:
+        for later in item:
+            result.append(later)
 
-    return sum_number
+    return result
 
-my_func(10)
+
+word1 = 'hello'
+word2 = 'world'
+
+result = my_func(word1, word2)
+
+print(result)
 

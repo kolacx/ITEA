@@ -1,22 +1,22 @@
 class MyComplex:
     def __init__(self, real, imag=0.0):
-        self.real = real
-        self.imag = imag
+        self._real = real
+        self._imag = imag
 
     def __str__(self):
-        return f'({self.real}+{self.imag}j)'
+        return f'({self._real}+{self._imag}j)'
 
     def __add__(comp1, comp2):
-        return MyComplex(comp1.real + comp2.real, comp1.imag + comp2.imag)
+        return MyComplex(comp1._real + comp2._real, comp1._imag + comp2._imag)
 
     def __mul__(comp1, comp2):
-        return MyComplex(comp1.real * comp2.real, comp1.imag * comp2.imag)
+        return MyComplex(comp1._real * comp2._real, comp1._imag * comp2._imag)
 
     def __sub__ (comp1, comp2):
-        return MyComplex(comp1.real - comp2.real, comp1.imag - comp2.imag)
+        return MyComplex(comp1._real - comp2._real, comp1._imag - comp2._imag)
 
     def __truediv__ (comp1, comp2):
-        return MyComplex(comp1.real / comp2.real, comp1.imag / comp2.imag)
+        return MyComplex(comp1._real / comp2._real, comp1._imag / comp2._imag)
 
 
 a = MyComplex(1,2)
