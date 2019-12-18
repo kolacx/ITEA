@@ -80,6 +80,6 @@ for i in all_person:
 def find_person_age(age):
 
     for i in all_person:
-        if i.age_now >= 10:
+        if i.age_now >= age:
             print(f'age greades 10')
             i.inf_person()
