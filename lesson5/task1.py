@@ -22,12 +22,15 @@ def my_func(*args):
 
 # my_func(1, 2)
 
-for i in range(10):
+# for i in range(10):
 
-    my_func(i, i+1)
+#     my_func(i, i+1)
 
-list_download_img_url = ['https://cdn.pixabay.com/photo/2019/12/07/14/57/christmas-tree-4679463_960_720.jpg']
+list_download_img_url = ['https://cdn.pixabay.com/photo/2019/12/07/14/57/christmas-tree-4679463_960_720.jpg','https://cdn.pixabay.com/photo/2019/12/07/14/57/christmas-tree-4679463_960_720.jpg']
 
 
-def download_img(*args):
-    
+def download_img(args):
+    for i in args:
+        print(i)
+
+download_img(list_download_img_url)
