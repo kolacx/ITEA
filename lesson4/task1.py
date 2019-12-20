@@ -13,73 +13,73 @@ class Person(ABC):
         pass
 
 
-class Abiturient(Person):
+class Enrollee(Person):
 
-    def __init__(self, sur_name, year_birthday, fac):
+    def __init__(self, sur_name, year_of_birthday, faculty):
         self._sur_name = sur_name
-        self._year_birthday = year_birthday
-        self._fac = fac
+        self._year_of_birthday = int(year_of_birthday)
+        self._faculty = faculty
 
     def inf_person(self):
-        print(f'{self._sur_name} {self._year_birthday} {self._fac}')
+        print(f'{self._sur_name} {self._year_of_birthday} {self._faculty}')
 
     def age_now(self):
         now = datetime.datetime.now()
-        print(now.year - self._year_birthday)
+        return now.year - self._year_of_birthday
 
 
 class Student(Person):
 
-    def __init__(self, sur_name, year_birthday, fac, curs):
+    def __init__(self, sur_name, year_of_birthday, faculty, course):
         self._sur_name = sur_name
-        self._year_birthday = year_birthday
-        self._fac = fac
-        self._curs = curs
+        self._year_of_birthday = int(year_of_birthday)
+        self._faculty = faculty
+        self._course = course
 
     def inf_person(self):
-            print(f'{self._sur_name} {self._year_birthday} {self._fac} {self._curs}')
+        print(f'{self._sur_name} {self._year_of_birthday} {self._faculty} {self._course}')
 
     def age_now(self):
         now = datetime.datetime.now()
-        print(now.year - self._year_birthday)
+        return now.year - self._year_of_birthday
 
 
-class Prep(Person):
+class Teacher(Person):
 
-    def __init__(self, sur_name, year_birthday, fac, dolgnost, stag):
+    def __init__(self, sur_name, year_of_birthday, faculty, position, experience):
         self._sur_name = sur_name
-        self._year_birthday = year_birthday
-        self._fac = fac
-        self._dolgnost = dolgnost
-        self._stag = stag
+        self._year_of_birthday = int(year_of_birthday)
+        self._faculty = faculty
+        self._position = position
+        self._experience = experience
 
     def inf_person(self):
-            print(f'{self._sur_name} {self._year_birthday} {self._fac} {self._dolgnost} {self._stag}')
+        print(f'{self._sur_name} {self._year_of_birthday} {self._faculty} {self._position} {self._experience}')
 
     def age_now(self):
         now = datetime.datetime.now()
-        print(now.year - self._year_birthday)
+        return now.year - self._year_of_birthday
 
 
-a1 = Abiturient('lis1', 1990, 'Python')
-a2 = Abiturient('lis10', 1991, 'Python')
-a3 = Abiturient('lis20', 1992, 'Python')
+enrollee = [Enrollee(f'lis1{i}', f'199{i}', 'Python') for i in range(10)]
+student = [Student(f'lis2{i}', f'198{i}', 'Python', i) for i in range(5)]
+teacher = [Teacher(f'lis3{i}', f'197{i}', 'Python', 'head', i) for i in range(3)]
 
-s1 = Student('lis2', 1993, 'Python', 1)
-s2 = Student('lis100', 1994, 'Python', 1)
-s3 = Student('lis1000', 1995, 'Python', 1)
+all_p = enrollee + student + teacher
 
-p1 = Prep('lis4', 1996, 'Python', 'head', 10)
-p2 = Prep('lis6', 1997, 'Python', 'head', 10)
-
-all_person = [a1, a2, a3, s1, s2, s3, p1, p2]
-
-for i in all_person:
+for i in all_p:
     i.inf_person()
 
-def find_person_age(age):
+print('*' * 10)
 
-    for i in all_person:
-        if i.age_now >= age:
-            print(f'age greades 10')
-            i.inf_person()
+def find_person_age(age_l, age_h):
+
+    result = [i for i in all_p if i.age_now() >= age_l and i.age_now() <= age_h]
+
+    print(f'Person between range: {age_l} and {age_h}')
+    
+    for i in result:
+        i.inf_person()
+
+
+find_person_age(22, 46)
