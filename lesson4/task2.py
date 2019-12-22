@@ -29,11 +29,20 @@ class Authorize(Registrations):
 
     pass
 
+a = Registrations.create_user('kola', 'xpsp2')
+
+print(Registrations.get_all_users())
 
 q = input('Registrations or Authorize? (r/a) ')
 
 if q == 'r':
+
     login = input('Login: ')
+
+    while Registrations.if_login_exist(login):
+        print(f'Login: "{login}" already axist')
+        login = input('Login: ')
+
     password = input('Password: ')
 
     while Registrations.validation_password(password):
