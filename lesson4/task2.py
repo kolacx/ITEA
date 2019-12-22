@@ -29,7 +29,7 @@ class Authorize(Registrations):
 
     pass
 
-a = Registrations.create_user('kola', 'xpsp2')
+a = Registrations.create_user('kola', 'qqq2')
 
 print(Registrations.get_all_users())
 
