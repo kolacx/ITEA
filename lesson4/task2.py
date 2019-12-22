@@ -18,7 +18,7 @@ class Registrations():
     def create_user(login, password):
 
         if Registrations.if_login_exist(login):
-            print(f'Login: {login} already axist')
+            print(f'Login: "{login}" already axist')
         elif Registrations.validation_password(password):
             print('Password needs contain digits')
         else:
@@ -30,7 +30,27 @@ class Authorize(Registrations):
     pass
 
 
-a = Registrations.create_user('kola', 'xpsp2')
-b = Registrations.create_user('kola', 'xpsp2')
+q = input('Registrations or Authorize? (r/a) ')
 
-print(Registrations.get_all_users())
+if q == 'r':
+    login = input('Login: ')
+    password = input('Password: ')
+
+    while Registrations.validation_password(password):
+        password = input('Password needs to contain digits. Password: ')
+    
+    re_password = input('Re_password: ')
+
+    while password != re_password:
+        print('Password != re_password')
+
+        password = input('Password: ')
+
+        while Registrations.validation_password(password):
+            password = input('Password needs to contain digits. Password: ')
+        
+        re_password = input('Re_password: ')
+
+    Registrations.create_user(login, password)
+
+    print(Registrations.get_all_users())
