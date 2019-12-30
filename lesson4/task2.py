@@ -17,25 +17,30 @@ class Registrations():
 
     def create_user(login, password):
 
-        if Registrations.if_login_exist(login):
-            print(f'Login: "{login}" already axist')
-        elif Registrations.validation_password(password):
-            print('Password needs contain digits')
-        else:
+        # if Registrations.if_login_exist(login):
+        #     print(f'Login: "{login}" already axist')
+        # elif Registrations.validation_password(password):
+        #     print('Password needs contain digits')
+        # else:
             Registrations._users[login] = {'Login': login, 'Password': password}
 
 
 class Authorize(Registrations):
 
-    pass
+    def log_in(login, password):
+        pass
 
+
+# Test Authorize log_in() start
 a = Registrations.create_user('kola', 'qqq2')
 
 print(Registrations.get_all_users())
 
-q = input('Registrations or Authorize? (r/a) ')
+print(Authorize.log_in('kola', 'qqq2'))
+# Test Authorize log_in() end
 
-if q == 'r':
+
+def registration():
 
     login = input('Login: ')
 
@@ -63,3 +68,30 @@ if q == 'r':
     Registrations.create_user(login, password)
 
     print(Registrations.get_all_users())
+
+def log_in():
+
+    login = input('Enter Login: ')
+
+    if not Registrations.if_login_exist(login):
+        print(False)
+
+    users = Registrations.get_all_users()
+
+    password = input('Enter Password: ')
+
+    if users[login]['Password'] == password:
+        print(True)
+
+
+def menu():
+
+    q = input('Registrations or Authorize? (r/a) ')
+
+    if q == 'r':
+        registration()
+    elif q == 'a':
+        log_in()
+        
+
+menu()

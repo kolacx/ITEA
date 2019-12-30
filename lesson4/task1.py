@@ -4,6 +4,11 @@ import datetime
 
 class Person(ABC):
 
+    def __init__(self, sur_name, year_of_birthday, faculty):
+        self._sur_name = sur_name
+        self._year_of_birthday = int(year_of_birthday)
+        self._faculty = faculty
+
     @abstractmethod
     def inf_person(self):
         pass
@@ -16,9 +21,7 @@ class Person(ABC):
 class Enrollee(Person):
 
     def __init__(self, sur_name, year_of_birthday, faculty):
-        self._sur_name = sur_name
-        self._year_of_birthday = int(year_of_birthday)
-        self._faculty = faculty
+        super().__init__(sur_name, year_of_birthday, faculty)
 
     def inf_person(self):
         print(f'{self._sur_name} {self._year_of_birthday} {self._faculty}')
@@ -31,9 +34,7 @@ class Enrollee(Person):
 class Student(Person):
 
     def __init__(self, sur_name, year_of_birthday, faculty, course):
-        self._sur_name = sur_name
-        self._year_of_birthday = int(year_of_birthday)
-        self._faculty = faculty
+        super().__init__(sur_name, year_of_birthday, faculty)
         self._course = course
 
     def inf_person(self):
@@ -47,9 +48,7 @@ class Student(Person):
 class Teacher(Person):
 
     def __init__(self, sur_name, year_of_birthday, faculty, position, experience):
-        self._sur_name = sur_name
-        self._year_of_birthday = int(year_of_birthday)
-        self._faculty = faculty
+        super().__init__(sur_name, year_of_birthday, faculty)
         self._position = position
         self._experience = experience
 
