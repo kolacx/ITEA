@@ -13,3 +13,5 @@ class Connection_db():
 
 with Connection_db() as db:
     print(db)
+
+print(db)
