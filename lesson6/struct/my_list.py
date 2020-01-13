@@ -13,16 +13,20 @@ class MyList:
         return self._my_list
 
     def append(self, value):
-        return self._my_list + [value]
+        self._my_list[len(self._my_list):] = [value]
+        return self._my_list
+
+    def insert(self, position, value):
+        self._my_list[position : position] = [value]
+        return self._my_list
+
+    def remove(self, value):
+        for k, v in enumerate(self._my_list):
+            if v == value:
+                del self._my_list[k]
+                break
+
 
     def __str__(self):
         return str(self._my_list)
 
-a = MyList(10)
-
-print(a)
-
-# a.clear()
-a.pop()
-a.append('123')
-print(a)
