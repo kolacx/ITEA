@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+    <h1>Hello world</h1>
+
+
+    {% for i in list_of_items %}
+        <p>{{i}}</p>
+    {% endfor %}
+
+    {% for key, value in to_buy.items() %}
+        <p>
+            <a href="/product/{{key}}">Product: {{key}}</a>
+        </p>
+
+    {% endfor %}
+
+
+</body>
+</html>
