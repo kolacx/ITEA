@@ -1,0 +1,8 @@
+get_json() - slovar/ Perekogonui
+
+json prosto stroka
+
+dump iz python v json
+
+
+post teg author

@@ -8,24 +8,37 @@ class Curator(Document):
 class Facultet(Document):
     name = StringField(max_length=256, min_length=0, required=True)
 
+    def filter_by_facultet(self):
+        return Student.objects.filter(
+            facultet=self
+            )
+
+    def top_by_facultet(self, value):
+        return Student.objects.filter(
+            facultet=self,
+            marks__gr=value
+            )
 
 class Student(Document):
     fullname = StringField(max_length=256, min_length=0, required=True)
     group = IntField(max_length=10, min_length=0)
     marks = ListField(IntField(max_length=3, min_length=0))
+    
     curator = ReferenceField('Curator')
     facultet = ReferenceField('Facultet')
 
-    def create_user(**kwargs):
-        return Student(**kwargs).save()
+    @classmethod
+    def create_user(cls, **kwargs):
+        return cls(**kwargs).save()
 
-    def fint_student_by_name(name):
-        return Student.objects.get(fullname=name)
+    @classmethod
+    def fint_student_by_name(cls, name):
+        return cls.objects.get(fullname=name)
 
-    def deleta_student(student):
+    def deleta_student(student): # self?
         student.delete()
 
-    def update_student(student, **kwargs):
+    def update_student(student, **kwargs): # self?
         student.update(**kwargs)
 
 
