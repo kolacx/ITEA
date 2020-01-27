@@ -1,0 +1,11 @@
+
+    # message.text - Tekst soobweniya
+    message.chat.id - ! Ид пользователя. ИД чата
+    message.from_user.id - Ид пользователя. ИД пользователя.
+
+    message.message_id - ид сообщения
+
+InlineKeyboardButton
+    Инлайн кнопка не отправляет текст
+
+конечный автомат телеграм бот
