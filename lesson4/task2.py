@@ -73,16 +73,20 @@ def log_in():
 
     login = input('Enter Login: ')
 
-    if not Registrations.if_login_exist(login):
-        print(False)
-
-    users = Registrations.get_all_users()
+    while not Authorize.if_login_exist(login):
+        print(f'Login "{login}" wrong.')
+        login = input('Enter Login: ')
+        
+    users = Authorize.get_all_users()
 
     password = input('Enter Password: ')
 
-    if users[login]['Password'] == password:
-        print(True)
+    while users[login]['Password'] != password:
+        print('Password incorect. Plz Try agein')
+        password = input('Enter Password: ')
 
+    flag = True
+    user_menu(flag)
 
 def menu():
 
@@ -93,5 +97,9 @@ def menu():
     elif q == 'a':
         log_in()
         
+def user_menu(flag):
+    
+    if flag:
+        print('You login')
 
 menu()
