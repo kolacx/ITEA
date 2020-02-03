@@ -17,8 +17,12 @@ def set_user_info(client_id, name=None,
 
 
 def create_new_user(client_id, step):
-	User(telegram_id=client_id,
-		step=step).save()
+	
+	try:
+		User(telegram_id=client_id,
+			step=step).save()
+	except:
+		pass
 
 def set_user_name(client_id, name, step):
 

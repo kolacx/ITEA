@@ -3,11 +3,18 @@ connect('shop')
 
 
 class User(Document):
+
+    STATES = (
+            ('products', 'products'),
+            ('categories', 'categories'),
+        )
+
     telegram_id = StringField(max_length=32, required=True)
     username = StringField(max_length=128)
     fullname = StringField(max_length=256)
     phone_number = StringField(max_length=20)
     email = EmailField()
+    state = StringField(choises=STATES)
 
 class Cart(Document):
     user = ReferenceField(User)
@@ -15,6 +22,19 @@ class Cart(Document):
 
     def get_cart(self):
         return CartProduct.objects.filter(cart=self)
+
+    def add_product_to_cart(self, product):
+        CartProduct.objects.create(
+            cart=self,
+            product=product
+        )
+
+    def delete_product_from_cart(self, product):
+        CartProduct.objects.filter(
+            cart=self,
+            product=product
+        ).first().delete()
+
 
     # TODO 
     # Overthink
@@ -34,7 +54,7 @@ class Attributes(EmbeddedDocument):
 
 
 class Category(Document):
-    title = StringField(max_length=255, min_length=1, required=True, unique=True)
+    title = StringField(max_length=255, min_length=1, required=True)
     description = StringField(max_length=4096)
     parent = ReferenceField('self')
     is_root = BooleanField(default=False)
@@ -57,7 +77,8 @@ class Category(Document):
         if kwargs.get('parent') == True:
             kwargs['is_root'] == False
 
-        Product(**kwargs).save()
+        return cls(**kwargs).save()
+        
 
     def get_products(self):
         return Product.objects.filter(
@@ -88,3 +109,60 @@ class Texts(Document):
 
     text_type = StringField(choices=TEXT_TYPES)
     body = StringField(max_length=2048)
+
+
+if __name__ =='__main__':
+
+    ### Creation
+    # category_dict = {
+    #     'title': 'category1',
+    #     'description': 'category1 description',
+    #     'is_root': True, 
+    # }
+
+    # root_cat = Category.create(**category_dict)
+
+    # for i in range(5):
+    #     category_dict = {
+    #         'title': f'Sub_category{i}',
+    #         'description': f'category{i} description',
+    #     }
+    #     sub_cat = Category(**category_dict)
+    #     root_cat.add_subcategory(sub_cat)
+
+    ### END
+
+    # cats = Category.objects.filter(is_root=True)
+
+    # for cat in cats:
+    #     print(cat)
+
+    #     if cat.subcategories:
+    #         for sub in cat.subcategories:
+    #             print(f'Parent is {sub.parent}')
+    #             print(f'sub cat {sub}')
+
+    # ITEMS FREQUENCIES
+
+    # user = User.objects.create(telegram_id='12345')
+
+    # cart = Cart.objects.create(user=user)
+
+    # for i in range(10):
+
+    #     prod = {
+    #         'title': f'title{i}',
+    #         'article': f'article{i}',
+    #         'category': Category.objects.first(),
+    #         'price': 10 * i + 1
+    #     }
+
+    #     created_product = Product.objects.create(**prod)
+    #     cart.add_product_to_cart(created_product)
+
+    cart = Cart.objects.first()
+    # print(cart.get_cart())
+
+    print(cart.get_cart().item_frequencies('product')) # Prod i kolichestvo
+
+    

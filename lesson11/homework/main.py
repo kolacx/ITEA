@@ -13,10 +13,13 @@ from db_worker import (
     set_user_email, 
     set_user_location,
     set_user_needs,
+    get_user,
     current_state
     )
 
 bot = TeleBot(TOKEN)
+
+# KeyboardButton - requestlocation=True
 
 @bot.message_handler(commands=['start'])
 def main_menu(message):
@@ -70,19 +73,19 @@ def save_needs(message):
     print('SaveNeeds')
     set_user_needs(str(message.chat.id), message.text, 6)
 
-    bot.send_message(message.chat.id, 'Адрес есть. Теперь Пожелание')
+    bot.send_message(message.chat.id, 'End')
 
 
 @bot.message_handler(func=lambda message: current_state(str(message.chat.id)) == 6)
-def save_needs(message):
+def show_info(message):
     user = get_user(str(message.chat.id))
 
     mes = (f'Вот что ты ввел \n'
             f'Name: {user.username} \n'
-            f'Name: {user.phone_number} \n'
-            f'Name: {user.location} \n'
-            f'Name: {user.email} \n'
-            f'Name: {user.needs}'
+            f'Phone: {user.phone_number} \n'
+            f'Location: {user.location} \n'
+            f'email: {user.email} \n'
+            f'Needs: {user.needs}'
             )
 
     bot.send_message(message.chat.id, mes)
