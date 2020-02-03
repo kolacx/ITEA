@@ -1,5 +1,21 @@
 from model import User
 
+def set_user_info(client_id, name=None, 
+					phone=None, email=None, 
+					location=None, needs=None,
+					step=1):
+
+	user = User.objects.get(telegram_id=client_id)
+	user.username = name
+	user.phone_number = phone
+	user.email = email
+	user.location = location
+	user.needs = needs
+	user.step = step
+
+	user.save()
+
+
 def create_new_user(client_id, step):
 	User(telegram_id=client_id,
 		step=step).save()
