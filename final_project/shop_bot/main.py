@@ -1,10 +1,10 @@
-from telebot import TeleBot
+from bot import TGbot
 from config import TOKEN
 from models.model import Category, Product, Texts
 from keyboards import START_KB
 from telebot.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton
 
-bot = TeleBot(token=TOKEN)
+bot = TGbot(token=TOKEN)
 
 @bot.message_handler(commands=['start'])
 def start(message):

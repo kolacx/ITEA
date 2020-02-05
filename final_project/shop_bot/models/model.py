@@ -1,5 +1,5 @@
 from mongoengine import *
-connect('shop')
+db = connect('shop')
 
 
 class User(Document):
@@ -96,6 +96,7 @@ class Product(Document):
     attributes = EmbeddedDocumentField(Attributes)
     extra_data = StringField(max_length=4096)
     category = ReferenceField(Category, required=True)
+    image = FileField(required=True)
 
     def get_price(self):
         return self.price if not self.discount_price else self.discount_price
@@ -111,7 +112,8 @@ class Texts(Document):
     body = StringField(max_length=2048)
 
 
-if __name__ =='__main__':
+if __name__ == '__main__':
+    print('model')
 
     ### Creation
     # category_dict = {
@@ -125,7 +127,7 @@ if __name__ =='__main__':
     # for i in range(5):
     #     category_dict = {
     #         'title': f'Sub_category{i}',
-    #         'description': f'category{i} description',
+    #         'description': f'Sub_category{i} description',
     #     }
     #     sub_cat = Category(**category_dict)
     #     root_cat.add_subcategory(sub_cat)
@@ -160,9 +162,7 @@ if __name__ =='__main__':
     #     created_product = Product.objects.create(**prod)
     #     cart.add_product_to_cart(created_product)
 
-    cart = Cart.objects.first()
+    # cart = Cart.objects.first()
     # print(cart.get_cart())
 
-    print(cart.get_cart().item_frequencies('product')) # Prod i kolichestvo
-
-    
+    # print(cart.get_cart().item_frequencies('product')) """ Prod i kolichestvo """
