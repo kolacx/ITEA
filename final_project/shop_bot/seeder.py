@@ -4,12 +4,12 @@ from datetime import datetime
 dt = datetime.now()
 
 
-db.drop_database('shop') # Test
+# db.drop_database('shop') 
 
 ## Creation Создаем 5 категорий и под каждую из них 1 подкатегорию
 
-
-
+Texts(text_type='Greeting',
+    body='Какойто текст приведствия').save()
 
 for i in range(5):
 
@@ -48,7 +48,18 @@ for i in range(5):
             pr.image.put(image_file, content_type='image/jpg')
             pr.save()
 
-prod = Product.objects.all()
+# prod = Product.objects.all()
 
-for i in prod:
-    print(i.image)
+# for i in prod:
+#     print(i.image)
+
+txt = Texts.objects.all()
+
+for i in txt:
+    print(i)
+
+
+cat = Category.objects.all()
+
+for i in cat:
+    print(i)

@@ -44,21 +44,17 @@ def start(message):
 
 @bot.message_handler(func=lambda message: message.text == START_KB['categories'])
 def category(message):
-    category = Category.objects.filter(
-            is_root=True
-        )
 
-    kb = InlineKeyboardMarkup()
-    buttons = [
-        InlineKeyboardButton(text=cat.title, callback_data=str(cat.id)) for cat in category
-    ]
 
-    kb.add(*buttons)
+    bot.root_categories(message.chat.id, 'Выберите категорию')
 
-    bot.send_message(message.chat.id, 'Выберите категорию', reply_markup=kb)
 
-@bot.callback_query_handler(func=lambda call: True)
+@bot.callback_query_handler(func=lambda call: call.data.split('_')[0] == 'category')
 def get_cat_or_products(call):
+    print('callback_query_handler Category')
+    category_id = call.data.split('_')[1]
+
+    bot.subcategories_or_products(category_id, call.message.message_id, call.message.chat.id, 'Выберите подкатегорию' )
 
     """
 
@@ -70,34 +66,31 @@ def get_cat_or_products(call):
 
     # bot.send_message(call.message.chat.id, call.data)
 
-    kb = InlineKeyboardMarkup()
+    # kb = InlineKeyboardMarkup()
 
-    category = Category.objects.get(id=call.data)
+    # category = Category.objects.get(id=call.data)
 
-    if category.subcategories:
-        # Наполнения еще одной клавиатуры с категориями
-        buttons = [
-            InlineKeyboardButton(text=cat.title, callback_data=str(cat.id)) for cat in category.subcategories
-        ]
+    # if category.subcategories:
+    #     buttons = [
+    #         InlineKeyboardButton(text=cat.title, callback_data=str(cat.id)) for cat in category.subcategories
+    #     ]
 
-        kb.add(*buttons)
-        bot.edit_message_text(category.title,
-                                message_id=call.message.message_id, 
-                                chat_id=call.message.chat.id,  
-                                reply_markup=kb)
-        # bot.send_message(call.message.chat.id, category.title, reply_markup=kb)
+    #     kb.add(*buttons)
+    #     bot.edit_message_text(category.title,
+    #                             message_id=call.message.message_id, 
+    #                             chat_id=call.message.chat.id,  
+    #                             reply_markup=kb)
 
-    else:
-        for product in category.get_product():
-            mes = (f'{product.title} \n' 
-                    f'{product.description}') 
+    # else:
+    #     for product in category.get_product():
+    #         mes = (f'{product.title} \n' 
+    #                 f'{product.description}') 
 
-            buttons = [InlineKeyboardButton(callback_data=str(product.id), text='Посмотреть товар')]
-            kb.add(*buttons)
+    #         buttons = [InlineKeyboardButton(callback_data=str(product.id), text='Посмотреть товар')]
+    #         kb.add(*buttons)
 
-            # send_photo - Сюдой все передать
 
-            bot.send_message(message.chat.id, mes, reply_markup=kb)
+    #         bot.send_message(message.chat.id, mes, reply_markup=kb)
 
 
         # Выводим продукты етой

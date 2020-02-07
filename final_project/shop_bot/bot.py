@@ -20,13 +20,16 @@ class TGbot(TeleBot):
         kb.add(*buttons)
 
         if not force_send:
+            print('KB')
             return kb
-            
+        
+        print('Message')
         self.send_message(user_id, text, reply_markup=kb)
 
 
     def subcategories_or_products(self, 
             category_id, 
+            message_id,
             user_id=None, 
             text=None,
             category_loockup='category', 
@@ -38,21 +41,26 @@ class TGbot(TeleBot):
 
         category = Category.objects.get(id=category_id)
 
+        kb = types.InlineKeyboardMarkup()
+
         if category.subcategories:
             # Наполнения еще одной клавиатуры с категориями
+            
+
             buttons = [
                 types.InlineKeyboardButton(text=cat.title, callback_data=f'{category_loockup}_{cat.id}') for cat in category.subcategories
             ]
 
             kb.add(*buttons)
-            bot.edit_message_text(category.title,
-                                    message_id=call.message.message_id, 
-                                    chat_id=call.message.chat.id,  
+            self.edit_message_text(category.title,
+                                    message_id=message_id, 
+                                    chat_id=user_id,  
                                     reply_markup=kb)
-            # bot.send_message(call.message.chat.id, category.title, reply_markup=kb)
+            # self.send_message(call.message.chat.id, category.title, reply_markup=kb)
 
         else:
-            for product in category.get_product():
+
+            for product in category.get_products():
                 mes = (f'{product.title} \n' 
                         f'{product.description}') 
 
@@ -61,12 +69,12 @@ class TGbot(TeleBot):
 
                 # send_photo - Сюдой все передать
 
-                bot.send_message(message.chat.id, mes, reply_markup=kb)
+                self.send_message(user_id, mes, reply_markup=kb)
 
-        kb = types.InlineKeyboardMarkup()
-        kb.add(*buttons)
+        # kb = types.InlineKeyboardMarkup()
+        # kb.add(*buttons)
 
-        if not force_send:
-            return kb
+        # if not force_send:
+        #     return kb
 
-        self.send_message(user_id, text, reply_markup=kb)
+        # self.send_message(user_id, text, reply_markup=kb)
