@@ -1,19 +1,4 @@
-from model import User
-
-def set_user_info(client_id, name=None, 
-					phone=None, email=None, 
-					location=None, needs=None,
-					step=1):
-
-	user = User.objects.get(telegram_id=client_id)
-	user.username = name
-	user.phone_number = phone
-	user.email = email
-	user.location = location
-	user.needs = needs
-	user.step = step
-
-	user.save()
+from model import User, Attributes
 
 
 def create_new_user(client_id, step):
@@ -45,24 +30,23 @@ def set_user_email(client_id, email, step):
 	user.step = step
 	user.save()
 
-def set_user_location(client_id, location, step):
+def set_user_location(client_id, latitude, longitude, step):
 
 	user = User.objects.get(telegram_id=client_id)
-	user.location = location
+	latitude_and_longitude = Attributes(latitude=latitude, longitude=longitude)
+	user.location = latitude_and_longitude
 	user.step = step
 	user.save()
 
-def set_user_needs(client_id, needs, step):
+def set_user_needs(client_id, needs):
 
 	user = User.objects.get(telegram_id=client_id)
 	user.needs = needs
-	user.step = step
 	user.save()
 
 def current_state(client_id):
 	
 	try:
-		print(client_id, '!!!!!!!!!!!!!!!!!!!!')
 		user = User.objects.get(telegram_id=client_id)
 		return user.step
 	except Exception as e:
@@ -71,4 +55,14 @@ def current_state(client_id):
 
 def get_user(client_id):
 
-	return User.objects.get(telegram_id=client_id)
+	try:
+		user = User.objects.get(telegram_id=client_id)
+		return user
+	except Exception as e:
+		print(e)
+		return False
+
+
+def reset_user(client_id):
+	user = User.objects.get(telegram_id=client_id)
+	user.delete()
