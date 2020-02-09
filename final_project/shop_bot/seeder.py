@@ -47,7 +47,7 @@ dt = datetime.now()
 #                     product_dict = {
 #                         'title': f'Название {i}',
 #                         'article': str(dt.microsecond),
-#                         'description': f'писание товара {i}',
+#                         'description': f'Описание товара {i}',
 #                         'price': 10 * i + 1,
 #                         'in_stock': 0,
 #                         'discount_price': i + 1,

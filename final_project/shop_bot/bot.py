@@ -1,11 +1,29 @@
 from telebot import TeleBot
-from models.model import Category
+from models.model import Category, Texts, Cart, Product
+from keyboards import START_KB
 from telebot import types
 
 class TGbot(TeleBot):
 
     def __init__(self, token, *args):
         super().__init__(token, *args)
+
+    def send_start(self, chat_id, force_send=True):
+        txt = Texts.objects.filter(
+            text_type='Greeting'
+            ).get()
+
+        kb = types.InlineKeyboardMarkup()
+        buttons = [types.InlineKeyboardButton(button_name, callback_data=button_name) for button_name in START_KB.values()]
+        kb.add(*buttons)
+
+        if not force_send:
+            return kb
+
+        self.send_message(chat_id, txt.body, reply_markup=kb)
+
+    def add_to_card(self, product_id, user_id):
+        pass
 
     def root_categories(self, user_id, text, callback_lookup='category', force_send=True):
         category = Category.objects.filter(
@@ -67,55 +85,32 @@ class TGbot(TeleBot):
             self.edit_message_text(category.title, message_id=message_id, chat_id=user_id, reply_markup=kb)
 
         else:
-            print('STEP THIRD')
             results = []
 
             for product in category.get_products():
-                # print('STEP ==========')
-                print(product.id)
+                
+                url_img = 'https://s.ftcdn.net/v2013/pics/all/curated/RKyaEDwp8J7JKeZWQPuOVWvkUjGQfpCx_cover_580.jpg'
+
                 kb = types.InlineKeyboardMarkup()
 
-                button = types.InlineKeyboardButton(text='Добавить в корзину', callback_data=str(product.id))
+                button = types.InlineKeyboardButton(text='Добавить в корзину', callback_data=f'{product_loockup}_{product.id}')
 
                 kb.add(button)
                 result1 = types.InlineQueryResultArticle(
-                            id=product.id,
-                            title='Назвdasdasdasdasdasание',
-                            description='Опиdasdсание',
-                            thumb_url='https://s.ftcdn.net/v2013/pics/all/curated/RKyaEDwp8J7JKeZWQPuOVWvkUjGQfpCx_cover_580.jpg',
+                            id=str(product.id),
+                            title=product.title,
+                            description=product.description,
+                            thumb_url=url_img,
                             reply_markup=kb,
 
                             input_message_content=types.InputTextMessageContent(
                                 parse_mode='HTML',
                                 disable_web_page_preview=False,
-                                message_text="dasdasda <a href='https://s.ftcdn.net/v2013/pics/all/curated/RKyaEDwp8J7JKeZWQPuOVWvkUjGQfpCx_cover_580.jpg'>&#8204</a>"
+                                message_text=f"{product.title} \n{product.description} <a href='{url_img}'>&#8204</a>"
                             )
 
 
                         )
                 results.append(result1)
-            print(results)
-            
+
             self.answer_inline_query(message_id, results, cache_time=0)
-
-
-
-
-            # for product in category.get_products():
-            #     mes = (f'{product.title} \n' 
-            #             f'{product.description}') 
-
-            #     buttons = [types.InlineKeyboardButton(callback_data=f'{product_loockup}_{product.id}', text='Посмотреть товар')]
-            #     kb.add(*buttons)
-
-            #     # send_photo - Сюдой все передать
-
-            #     self.send_message(user_id, mes, reply_markup=kb)
-
-        # kb = types.InlineKeyboardMarkup()
-        # kb.add(*buttons)
-
-        # if not force_send:
-        #     return kb
-
-        # self.send_message(user_id, text, reply_markup=kb)
