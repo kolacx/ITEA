@@ -20,10 +20,8 @@ class TGbot(TeleBot):
         kb.add(*buttons)
 
         if not force_send:
-            print('KB')
             return kb
         
-        print('Message')
         self.send_message(user_id, text, reply_markup=kb)
 
 
@@ -39,37 +37,80 @@ class TGbot(TeleBot):
         if not(all([user_id, text])) and force_send:
             raise Exception('Force send cannot be used without user_id or text')
 
+        # Берем категорию
         category = Category.objects.get(id=category_id)
 
-        kb = types.InlineKeyboardMarkup()
+        kb = types.InlineKeyboardMarkup(row_width=2)
 
+        # Проверяем есть ли у категории Под категории
         if category.subcategories:
-            # Наполнения еще одной клавиатуры с категориями
-            
 
-            buttons = [
-                types.InlineKeyboardButton(text=cat.title, callback_data=f'{category_loockup}_{cat.id}') for cat in category.subcategories
-            ]
+            # Проверяем все подкатегории нашей Категории
+            for cat in category.subcategories:
 
+                # Если у нашей под категории есть еще подкатегории.
+                # Создаем Inline кнопки в сообщении
+                if cat.subcategories:
+                    buttons = [
+                        types.InlineKeyboardButton(text=cat.title, callback_data=f'{category_loockup}_{cat.id}')  for cat in category.subcategories
+                    ]
+
+                # Иначе будем отправлять кнопки с switch_inline_query_current_chat
+                else:
+                    buttons = [
+                        types.InlineKeyboardButton(text=cat.title, switch_inline_query_current_chat=f'{category_loockup}_{cat.id}') for cat in category.subcategories
+                    ]
+
+            # Добавляем все созданные кнопки
             kb.add(*buttons)
-            self.edit_message_text(category.title,
-                                    message_id=message_id, 
-                                    chat_id=user_id,  
-                                    reply_markup=kb)
-            # self.send_message(call.message.chat.id, category.title, reply_markup=kb)
+
+            self.edit_message_text(category.title, message_id=message_id, chat_id=user_id, reply_markup=kb)
 
         else:
+            print('STEP THIRD')
+            results = []
 
             for product in category.get_products():
-                mes = (f'{product.title} \n' 
-                        f'{product.description}') 
+                # print('STEP ==========')
+                print(product.id)
+                kb = types.InlineKeyboardMarkup()
 
-                buttons = [types.InlineKeyboardButton(callback_data=f'{product_loockup}_{product.id}', text='Посмотреть товар')]
-                kb.add(*buttons)
+                button = types.InlineKeyboardButton(text='Добавить в корзину', callback_data=str(product.id))
 
-                # send_photo - Сюдой все передать
+                kb.add(button)
+                result1 = types.InlineQueryResultArticle(
+                            id=product.id,
+                            title='Назвdasdasdasdasdasание',
+                            description='Опиdasdсание',
+                            thumb_url='https://s.ftcdn.net/v2013/pics/all/curated/RKyaEDwp8J7JKeZWQPuOVWvkUjGQfpCx_cover_580.jpg',
+                            reply_markup=kb,
 
-                self.send_message(user_id, mes, reply_markup=kb)
+                            input_message_content=types.InputTextMessageContent(
+                                parse_mode='HTML',
+                                disable_web_page_preview=False,
+                                message_text="dasdasda <a href='https://s.ftcdn.net/v2013/pics/all/curated/RKyaEDwp8J7JKeZWQPuOVWvkUjGQfpCx_cover_580.jpg'>&#8204</a>"
+                            )
+
+
+                        )
+                results.append(result1)
+            print(results)
+            
+            self.answer_inline_query(message_id, results, cache_time=0)
+
+
+
+
+            # for product in category.get_products():
+            #     mes = (f'{product.title} \n' 
+            #             f'{product.description}') 
+
+            #     buttons = [types.InlineKeyboardButton(callback_data=f'{product_loockup}_{product.id}', text='Посмотреть товар')]
+            #     kb.add(*buttons)
+
+            #     # send_photo - Сюдой все передать
+
+            #     self.send_message(user_id, mes, reply_markup=kb)
 
         # kb = types.InlineKeyboardMarkup()
         # kb.add(*buttons)

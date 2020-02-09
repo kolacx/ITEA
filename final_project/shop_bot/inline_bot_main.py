@@ -28,18 +28,20 @@ def inline(query):
 
         kb.add(button)
         result1 = types.InlineQueryResultArticle(
-                id=i,
-                title='Nazvanie',
-                description='Opisanie',
-                input_message_content=types.InputTextMessageContent(
-                    type='photo',
-                    media='https://upload.wikimedia.org/wikipedia/en/4/4f/Under_construction.JPG',
-                    caption='Opisanie'
-                    ),
-                # input_message_content=types.InputTextMessageContent(message_text='Текст после нажатия на инлайн кнопку'),
-                thumb_url='https://upload.wikimedia.org/wikipedia/en/4/4f/Under_construction.JPG',
-                reply_markup=kb
-            )
+                    id=i,
+                    title='Назвdasdasdasdasdasание',
+                    description='Опиdasdсание',
+                    thumb_url='https://s.ftcdn.net/v2013/pics/all/curated/RKyaEDwp8J7JKeZWQPuOVWvkUjGQfpCx_cover_580.jpg',
+                    reply_markup=kb,
+
+                    input_message_content=types.InputTextMessageContent(
+                        parse_mode='HTML',
+                        disable_web_page_preview=False,
+                        message_text="dasdasda <a href='https://s.ftcdn.net/v2013/pics/all/curated/RKyaEDwp8J7JKeZWQPuOVWvkUjGQfpCx_cover_580.jpg'>&#8204</a>"
+                    )
+
+
+                )
         results.append(result1)
 
     bot.answer_inline_query(query.id, results, cache_time=0)
