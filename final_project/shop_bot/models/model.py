@@ -9,7 +9,7 @@ class User(Document):
             ('categories', 'categories'),
         )
 
-    telegram_id = StringField(max_length=32, required=True)
+    telegram_id = StringField(max_length=32, required=True, unique=True)
     username = StringField(max_length=128)
     fullname = StringField(max_length=256)
     phone_number = StringField(max_length=20)
@@ -20,13 +20,24 @@ class Cart(Document):
     user = ReferenceField(User)
     is_archived = BooleanField(default=False)
 
-    def get_cart(self):
+    @classmethod
+    def get_or_create_cart(cls, user_id):
+        user = User.objects.get(id=user_id)
+        cart = cls.objects.get(user, is_archived=False) # pri start sozdat Cart
+
+        if not cart:
+            cart = cls.objects.create(user=user)
+
+        return cart
+
+    def get_cart_products(self):
         return CartProduct.objects.filter(cart=self)
 
-    def add_product_to_cart(self, product):
+
+    def add_product_to_cart(self, product_id):
         CartProduct.objects.create(
             cart=self,
-            product=product
+            product=Product.get_product(id=product_id)
         )
 
     def delete_product_from_cart(self, product):
@@ -100,6 +111,10 @@ class Product(Document):
 
     def get_price(self):
         return self.price if not self.discount_price else self.discount_price
+
+    @classmethod
+    def get_product(cls, **kwargs):
+        return cls.objects.get(kwargs)
 
 
 class Texts(Document):

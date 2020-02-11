@@ -63,11 +63,6 @@ dt = datetime.now()
 #                         pr.save()
 
 
-category = Category.objects.get(id='5e40066286fe5c52a56fc382')
-
-print(category.get_products())
-
-
 
 # category = Category.objects.all()
 

@@ -1,5 +1,5 @@
 from telebot import TeleBot
-from models.model import Category, Texts, Cart, Product
+from models.model import Category, Texts, Cart, Product, User
 from keyboards import START_KB
 from telebot import types
 
@@ -13,6 +13,8 @@ class TGbot(TeleBot):
             text_type='Greeting'
             ).get()
 
+        
+
         kb = types.InlineKeyboardMarkup()
         buttons = [types.InlineKeyboardButton(button_name, callback_data=button_name) for button_name in START_KB.values()]
         kb.add(*buttons)
@@ -22,8 +24,6 @@ class TGbot(TeleBot):
 
         self.send_message(chat_id, txt.body, reply_markup=kb)
 
-    def add_to_card(self, product_id, user_id):
-        pass
 
     def root_categories(self, user_id, text, callback_lookup='category', force_send=True):
         category = Category.objects.filter(
