@@ -1,4 +1,5 @@
 import global_settings
+from bot import TGbot
 
 def start_bot():
     if global_settings.DEBUG == True:

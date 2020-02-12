@@ -6,6 +6,9 @@ from telebot.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMar
 from flask import Flask, request, abort
 import utils
 
+'''
+Вынести БОТ в ботПиВай и импортировать его в мейн и в утилс
+'''
 
 bot = TGbot(token=TOKEN)
 
