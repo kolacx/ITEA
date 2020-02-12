@@ -1,6 +1,6 @@
 from bot import TGbot
 from config import TOKEN
-from models.model import Category, Product, Texts, Cart
+from models.model import Category, Product, Texts, Cart, User
 from keyboards import START_KB
 from telebot.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton
 
@@ -8,6 +8,8 @@ bot = TGbot(token=TOKEN)
 
 @bot.message_handler(commands=['start'])
 def start(message):
+    User.create_user(str(message.chat.id))
+    Cart.create_cart(str(message.chat.id))
     bot.send_start(message.chat.id)
 
 
@@ -39,13 +41,20 @@ def add_to_card(call):
     print('Add to Card')
 
     prod_id = call.data.split('_')[1]
-    user_id = call.message.chat.id
+    user_id = call.from_user.id
 
-    cart = Cart.get_or_create_cart(user_id)
+    cart = Cart.get_cart(str(user_id))
 
     cart.add_product_to_cart(product_id=prod_id)
 
-    # tyt pop up naiti Тут поп ап найти
+    bot.answer_callback_query(call.id, "Добавлено в корзину", show_alert=True)
+
+
+@bot.callback_query_handler(func=lambda call: call.data == START_KB['cart'])
+def get_root_category(call):
+    print('get_Cart')
+
+    bot.show_cart(str(call.from_user.id), 'Выберите категорию')
 
 """
 WEBHOOK_HOST = https://33.46.22.19:8443

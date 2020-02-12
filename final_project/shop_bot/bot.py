@@ -114,3 +114,24 @@ class TGbot(TeleBot):
                 results.append(result1)
 
             self.answer_inline_query(message_id, results, cache_time=0)
+
+
+    def show_cart(self, user_id, text, product_loockup='product', force_send=True):
+
+        user = User.get_user(user_id)
+        cart = Cart.get_cart(user_id)
+
+        cart_product = cart.get_cart_products()
+
+        kb = types.InlineKeyboardMarkup(row_width=2)
+
+        buttons = [
+            types.InlineKeyboardButton(text=pr.title, callback_data=f'{product_loockup}_{pr.id}')  for pr in cart_product
+        ]
+
+        kb.add(*buttons)
+
+        if not force_send:
+            return kb
+
+        self.send_message(user_id, text, reply_markup=kb)

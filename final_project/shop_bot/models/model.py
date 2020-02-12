@@ -16,28 +16,56 @@ class User(Document):
     email = EmailField()
     state = StringField(choises=STATES)
 
+    @classmethod
+    def create_user(cls, user_id):
+        print('Save User')
+        try:
+            cls.objects.create(telegram_id=user_id)
+        except Exception as e:
+            print('User')
+            print(e)
+
+    @classmethod
+    def get_user(cls, user_id):
+        return cls.objects.get(telegram_id=user_id)
+
 class Cart(Document):
     user = ReferenceField(User)
     is_archived = BooleanField(default=False)
 
     @classmethod
+    def create_cart(cls, user_id):
+        user = User.objects.get(telegram_id=user_id)
+        try:
+            cls.objects.create(user=user)
+        except Exception as e:
+            print('Cart')
+            print(e)
+
+    @classmethod
     def get_or_create_cart(cls, user_id):
-        user = User.objects.get(id=user_id)
-        cart = cls.objects.get(user, is_archived=False) # pri start sozdat Cart
+        user = User.objects.get(telegram_id=user_id)
+        cart = cls.objects.get(user=user, is_archived=False) # pri start sozdat Cart
 
         if not cart:
             cart = cls.objects.create(user=user)
 
         return cart
 
+    @classmethod
+    def get_cart(cls, user_id):
+        user = User.objects.get(telegram_id=user_id)
+        return cls.objects.get(user=user, is_archived=False)
+
     def get_cart_products(self):
         return CartProduct.objects.filter(cart=self)
 
 
     def add_product_to_cart(self, product_id):
+        pr = Product.get_product(id=product_id)
         CartProduct.objects.create(
             cart=self,
-            product=Product.get_product(id=product_id)
+            product=pr
         )
 
     def delete_product_from_cart(self, product):
@@ -114,7 +142,7 @@ class Product(Document):
 
     @classmethod
     def get_product(cls, **kwargs):
-        return cls.objects.get(kwargs)
+        return cls.objects.get(**kwargs)
 
 
 class Texts(Document):

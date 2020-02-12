@@ -62,6 +62,16 @@ dt = datetime.now()
 #                         pr.image.put(image_file, content_type='image/jpg')
 #                         pr.save()
 
+# cart = Cart.objects.all()
+
+# for c in cart:
+# 	print(c.user.telegram_id)
+# 	print(c)
+
+user = User.objects.all()
+
+for u in user:
+	print(u)
 
 
 # category = Category.objects.all()
@@ -83,3 +93,5 @@ dt = datetime.now()
 
 #             sub_sub_cat = Category(**sub_sub_category_dict)
 #             cat.add_subcategory(sub_sub_cat)
+
+
