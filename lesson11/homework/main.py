@@ -53,7 +53,8 @@ def registration_start(message):
         bot.send_message(message.chat.id, 'Имя есть. Теперь телефон')
     elif user.step == 3:
         bot.send_message(message.chat.id, 'Телефон есть. Теперь Емейл')
-    else user.step == 4:
+    else:
+        """user.step == 4"""
         kb = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
         buttons = [KeyboardButton('Отправить локацию', request_location=True)]
         kb.add(*buttons)

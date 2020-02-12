@@ -1,10 +1,30 @@
 from bot import TGbot
-from config import TOKEN
+from config import TOKEN, WEBHOOK_URL, PATH
 from models.model import Category, Product, Texts, Cart, User
 from keyboards import START_KB
-from telebot.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton
+from telebot.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton, Update
+from flask import Flask, request, abort
+
 
 bot = TGbot(token=TOKEN)
+
+app = Flask(__name__)
+
+
+@app.route(f'/{PATH}', methods=['POST'])
+def webhook():
+    """
+    Function process webhook call
+    """
+    if request.headers.get('content-type') == 'application/json':
+
+        json_string = request.get_data().decode('utf-8')
+        update = telebot.types.Update.de_json(json_string)
+        bot.process_new_updates([update])
+        return ''
+
+    else:
+        abort(403)
 
 @bot.message_handler(commands=['start'])
 def start(message):
@@ -81,4 +101,11 @@ Server -
 """
 
 if __name__ == '__main__':
-    bot.polling()
+    import time
+    print('STARTED')
+    bot.remove_webhook()
+    time.sleep(1)
+    bot.set_webhook(
+        url=WEBHOOK_URL,
+        cartificate=open('nginx-selfsigned.crt', 'r')
+        )
