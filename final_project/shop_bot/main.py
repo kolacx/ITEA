@@ -4,6 +4,7 @@ from models.model import Category, Product, Texts, Cart, User
 from keyboards import START_KB
 from telebot.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton, Update
 from flask import Flask, request, abort
+import utils
 
 
 bot = TGbot(token=TOKEN)
@@ -101,12 +102,13 @@ Server -
 """
 
 if __name__ == '__main__':
-    import time
-    print('STARTED')
-    bot.remove_webhook()
-    time.sleep(1)
-    bot.set_webhook(
-        url=WEBHOOK_URL,
-        certificate=open('nginx-selfsigned.crt', 'r')
-        )
-    app.run(host='127.0.0.1', port=5000, debug=True)
+    utils.start_bot()
+    # import time
+    # print('STARTED')
+    # bot.remove_webhook()
+    # time.sleep(1)
+    # bot.set_webhook(
+    #     url=WEBHOOK_URL,
+    #     certificate=open('nginx-selfsigned.crt', 'r')
+    #     )
+    # app.run(host='127.0.0.1', port=5000, debug=True)

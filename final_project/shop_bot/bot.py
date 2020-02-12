@@ -123,15 +123,17 @@ class TGbot(TeleBot):
 
         cart_product = cart.get_cart_products()
 
-        kb = types.InlineKeyboardMarkup(row_width=2)
-
-        buttons = [
-            types.InlineKeyboardButton(text=pr.title, callback_data=f'{product_loockup}_{pr.id}')  for pr in cart_product
-        ]
-
-        kb.add(*buttons)
-
         if not force_send:
             return kb
 
-        self.send_message(user_id, text, reply_markup=kb)
+        for pr in cart_product:
+
+            kb = types.InlineKeyboardMarkup(row_width=2)
+
+            buttons = [
+                types.InlineKeyboardButton(text=pr.title, callback_data=f'{product_loockup}_{pr.id}')
+            ]
+
+            kb.add(*buttons)
+
+            self.send_message(user_id, text, reply_markup=kb)
