@@ -13,6 +13,7 @@ from db_worker import (
     set_user_email, 
     set_user_location,
     set_user_needs,
+    set_step,
     get_user,
     current_state,
     reset_user
@@ -45,7 +46,8 @@ def registration_start(message):
     user = get_user(str(message.chat.id))
 
     if not user:
-        create_new_user(str(message.chat.id), 1)
+        create_new_user(str(message.chat.id))
+        set_step(str(message.chat.id), 1)
         bot.send_message(message.chat.id, 'Введи свое Имя.')
     elif user.step == 2:
         bot.send_message(message.chat.id, 'Имя есть. Теперь телефон')
@@ -58,11 +60,12 @@ def registration_start(message):
 
         bot.send_message(str(message.chat.id), 'Твоя локация', reply_markup=kb)
 
-
+        
 @bot.message_handler(func=lambda message: current_state(str(message.chat.id)) == 1)
 def save_name(message):
     print('SaveName')
-    set_user_name(str(message.chat.id), message.text, 2)
+    set_user_name(str(message.chat.id), message.text)
+    set_step(str(message.chat.id), 2)
 
     bot.send_message(message.chat.id, 'Имя есть. Теперь телефон')
 
@@ -70,7 +73,8 @@ def save_name(message):
 @bot.message_handler(func=lambda message: current_state(str(message.chat.id)) == 2)
 def save_phone(message):
     print('SavePhone')
-    set_user_phone(str(message.chat.id), message.text, 3)
+    set_user_phone(str(message.chat.id), message.text)
+    set_step(str(message.chat.id), 3)
 
     bot.send_message(message.chat.id, 'Телефон есть. Теперь Емейл')
 
@@ -78,7 +82,8 @@ def save_phone(message):
 @bot.message_handler(func=lambda message: current_state(str(message.chat.id)) == 3)
 def save_email(message):
     print('SaveMail')
-    set_user_email(str(message.chat.id), message.text, 4)
+    set_user_email(str(message.chat.id), message.text)
+    set_step(str(message.chat.id), 4)
 
     kb = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
     buttons = [KeyboardButton('Отправить локацию', request_location=True)]
@@ -92,7 +97,8 @@ def save_location(message):
     print('SaveAdres')
     print(message.location.latitude)
     print(message.location.longitude)
-    set_user_location(str(message.chat.id), message.location.latitude, message.location.longitude, 5)
+    set_user_location(str(message.chat.id), message.location.latitude, message.location.longitude)
+    set_step(str(message.chat.id), 5)
 
     bot.send_message(message.chat.id, 'Адрес есть. Теперь Пожелание')
 
