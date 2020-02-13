@@ -1,9 +1,9 @@
 import global_settings
-from bot import TGbot
+from config import bot, WEBHOOK_URL
 
 def start_bot():
     if global_settings.DEBUG == True:
-        bot.poling()
+        bot.polling()
     else:
         import time
         print('STARTED')

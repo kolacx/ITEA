@@ -1,5 +1,5 @@
-from bot import TGbot
-from config import TOKEN, WEBHOOK_URL, PATH
+# from bot import TGbot
+from config import TOKEN, WEBHOOK_URL, PATH, bot
 from models.model import Category, Product, Texts, Cart, User
 from keyboards import START_KB
 from telebot.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton, Update
@@ -10,7 +10,7 @@ import utils
 Вынести БОТ в ботПиВай и импортировать его в мейн и в утилс
 '''
 
-bot = TGbot(token=TOKEN)
+# bot = TGbot(token=TOKEN)
 
 app = Flask(__name__)
 
