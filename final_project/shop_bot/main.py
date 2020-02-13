@@ -3,7 +3,7 @@ from config import TOKEN, WEBHOOK_URL, PATH, bot
 from models.model import Category, Product, Texts, Cart, User
 from keyboards import START_KB
 from telebot.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton, Update
-from flask import Flask, request, abort
+from flask import request, abort
 import utils
 
 '''
