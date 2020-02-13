@@ -1,5 +1,5 @@
 # from bot import TGbot
-from config import TOKEN, WEBHOOK_URL, PATH, bot
+from config import TOKEN, WEBHOOK_URL, PATH, bot, app
 from models.model import Category, Product, Texts, Cart, User
 from keyboards import START_KB
 from telebot.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton, Update
