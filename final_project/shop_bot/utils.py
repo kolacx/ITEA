@@ -1,5 +1,5 @@
 import global_settings
-from config import bot, WEBHOOK_URL
+from config import bot, WEBHOOK_URL, app
 
 def start_bot():
     if global_settings.DEBUG == True:

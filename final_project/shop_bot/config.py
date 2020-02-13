@@ -7,3 +7,5 @@ PATH = "bot"
 WEBHOOK_URL = f'{WEBHOOK_HOST}/{PATH}'
 
 bot = TGbot(token=TOKEN)
+
+app = Flask(__name__)

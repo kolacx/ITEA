@@ -12,7 +12,7 @@ import utils
 
 # bot = TGbot(token=TOKEN)
 
-app = Flask(__name__)
+# app = Flask(__name__)
 
 
 @app.route(f'/{PATH}', methods=['POST'])
