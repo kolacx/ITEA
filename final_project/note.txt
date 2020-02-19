@@ -95,3 +95,28 @@ print(a.zxc)
 16) map - 
 dir - Возвращяет все методы и атрибуды обьекта
 filter - 
+
+
+head hunter djinni linkedin
+
+stack
+
+python - WebDev
+        - Data sience
+ 
+ chanels
+ salary - celery
+
+ postgres
+
+ REDIS - словарь БД
+
+ docer - -
+
+ unix - linux - bash - pocess - terminal
+
+ CICD
+
+
+
+ soket - Общяемся с ТСП
