@@ -13,9 +13,6 @@ def my_decorator(name_threads, is_daemon):
 
                 t = Thread(target=func, daemon=is_daemon, name=f'name_threads-{i}', args=(url, i))
                 thread_list[i] = {url: t}
-                # thread_list.append(t)
-
-            # print(thread_list)
 
             for i in thread_list:
                 for key, value in thread_list[i].items():
