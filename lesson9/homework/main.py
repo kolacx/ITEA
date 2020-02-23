@@ -41,7 +41,7 @@ class Student(Document):
 
     @classmethod
     def read_student(cls, **kwargs):
-        return cls.objects.get(**kwargs)
+        return cls.objects.filter(**kwargs)
 
     def update_student(self, **kwargs):
         self.update(**kwargs)
@@ -49,7 +49,7 @@ class Student(Document):
     def deleta_student(self):
         self.delete()
 
-
+# Get by facultet
 fac = Facultet.objects.get(name='Facultet №2')
 
 for st in fac.filter_by_facultet():
@@ -57,7 +57,18 @@ for st in fac.filter_by_facultet():
 
 print('-' * 10)
 
+# Get Top by facultet
 students = fac.top_by_facultet(55)
 
 for st in students:
     print(st.fullname, st.marks)
+
+print('-' * 10)
+
+# Get by Curator
+curator = Curator.objects.get(name='Curator №9')
+
+st = Student.read_student(curator=curator)
+
+for s in st:
+    print(s.fullname)
