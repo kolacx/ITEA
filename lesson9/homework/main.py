@@ -1,5 +1,7 @@
 from mongoengine import *
 
+db = connect('my_home_db')
+
 
 class Curator(Document):
     name = StringField(max_length=256, min_length=0, required=True)
@@ -14,10 +16,16 @@ class Facultet(Document):
             )
 
     def top_by_facultet(self, value):
-        return Student.objects.filter(
-            facultet=self,
-            marks__gr=value
-            )
+
+        student = self.filter_by_facultet()
+
+        top_students = []
+
+        for st in student:
+            if sum(st.marks)/len(st.marks) >= value:
+                top_students.append(st)
+
+        return top_students
 
 class Student(Document):
     fullname = StringField(max_length=256, min_length=0, required=True)
@@ -28,56 +36,28 @@ class Student(Document):
     facultet = ReferenceField('Facultet')
 
     @classmethod
-    def create_user(cls, **kwargs):
+    def create_student(cls, **kwargs):
         return cls(**kwargs).save()
 
     @classmethod
-    def fint_student_by_name(cls, name):
-        return cls.objects.get(fullname=name)
+    def read_student(cls, **kwargs):
+        return cls.objects.get(**kwargs)
 
-    def deleta_student(student): # self?
-        student.delete()
+    def update_student(self, **kwargs):
+        self.update(**kwargs)
 
-    def update_student(student, **kwargs): # self?
-        student.update(**kwargs)
+    def deleta_student(self):
+        self.delete()
 
 
-connect('my_home_db')
-# curator = Curator.objects.create(
-#     name = 'Curator1'
-#     )
+fac = Facultet.objects.get(name='Facultet №2')
 
-# facultet = Facultet.objects.create(
-#     name='Prog1'
-#     )
+for st in fac.filter_by_facultet():
+    print(st.fullname)
 
-my_fucultet = Facultet.objects.get(name='Prog1')
-my_curator = Curator.objects.get(name='Curator1')
+print('-' * 10)
 
-# student = Student.objects.create(
-#         fullname = 'Sasha',
-#         group = 123,
-#         marks = [1,2,3],
-#         curator = my_curator,
-#         facultet = my_fucultet
-#     )
+students = fac.top_by_facultet(55)
 
-# student = Student.objects.get(fullname='Sasha')
-
-# st = Student.create_user(
-#             fullname = 'Sasha2',
-#             group = 123,
-#             marks = [1,2,3],
-#             curator = my_curator,
-#             facultet = my_fucultet
-#     )
-
-# st = Student.objects.all()
-
-st = Student.fint_student_by_name('Sasha')
-
-print(st.fullname)
-
-Student.deleta_student(st)
-
-print(Student.objects.all())
+for st in students:
+    print(st.fullname, st.marks)
