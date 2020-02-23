@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Home Page</title>
+    <title>Categoury Page</title>
 </head>
 <body>
     <h1>Categoury page</h1>
 
+    {% for prod in products %}
+    	<p><a href="/product/{{prod.id}}">{{prod.title}}</a></p>
+    {% endfor %}
 </body>
 </html>

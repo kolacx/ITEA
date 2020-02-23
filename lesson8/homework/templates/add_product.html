@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Add Product</title>
+	<style type="text/css">
+		form input{
+			display: block;
+			margin-bottom: 10px
+		}
+		form input[type=radio]{
+			display: inline-block;
+		}
+	</style>
+</head>
+<body>
+	<h1>Add Product</h1>
+
+	{% if added_product %}
+		<h3>Product {{added_product.title}} Created</h3>
+	{% endif %}
+
+	<form action='/add_prod' method="POST">
+		<input type="text" name="title" placeholder="title">
+
+		<label for="in_sale">In Sale: Yes</label>
+		<input type="radio" name="in_sale" id='in_sale' value='True'>
+		<label for="in_sale2">In Sale: No</label>
+		<input type="radio" name="in_sale" id='in_sale2' value='False'>
+		
+		<input type="number" name="price" placeholder="price">
+		<input type="number" name="in_stock" placeholder="in_stock">
+
+		<label for=cat></label>
+		<select id="cat" name="category">
+			{% for cat in category %}
+				<option value="{{cat.id}}">{{cat.title}}</option>
+			{% endfor %}
+		  
+		</select>
+
+		<input type="submit" name="">
+	</form>
+</body>
+</html>

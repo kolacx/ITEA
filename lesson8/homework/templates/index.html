@@ -5,10 +5,9 @@
 </head>
 <body>
     <h1>All Category</h1>
-    <p>{{pr}}</p>
 
-    {% for key, value in cat.items() %}
-        <a href="/category/{{key}}">{{value}}</a>
+    {% for cat in categorys %}
+    	<p><a href="/category/{{cat.id}}">{{cat.title}}</a></p>
     {% endfor %}
 </body>
 </html>

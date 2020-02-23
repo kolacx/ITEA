@@ -10,8 +10,9 @@ class MyList:
         return self._my_list
 
     def pop(self):
+        last_item = self._my_list[-1]
         del self._my_list[-1]
-        return self._my_list
+        return last_item
 
     def append(self, value):
         self._my_list[len(self._my_list):] = [value]
@@ -58,4 +59,11 @@ class MyList:
 ll1 = MyList(1, 2, 3)
 ll2 = MyList(4, 5, 6)
 
-print(ll1+ll2)
+# print(ll1+ll2)
+
+# pop = ll1.pop()
+# print(pop)
+
+print(ll1.append(34))
+
+print(ll1.insert(2, 22222))

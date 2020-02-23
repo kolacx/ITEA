@@ -1,40 +1,62 @@
 from flask import Flask, request
 from flask import render_template, redirect
-import sqlite3
+from models import Product, Category
 
 app = Flask(__name__)
 
-class Connection_db():
-
-    def __enter__(self):
-        self._conn = sqlite3.connect('shop.db')
-        cursore = self._conn.cursor()
-        return cursore
-
-    def __exit__(self, *args):
-        self._conn.commit()
-        self._conn.close()
-
 @app.route('/')
 def home_page():
+    cat = Category.objects.all()
 
-    with Connection_db() as db:
-        q = db.execute("SELECT * FROM categorys")
-        category = dict(q.fetchall())
-        print(category)
-    return render_template('index.html', cat=category)
+    return render_template('index.html', categorys=cat)
 
-@app.route('/category/<int:id_category>')
+@app.route('/category/<string:id_category>')
 def category_page(id_category):
     
-    with Connection_db() as db:
-        q = db.execute("SELECT * FROM products WHERE category=id_category") # осмотреть как поле 
-        products = dict(q.fetchall())
-        print(products)
+    cat = Category.objects.get(id=id_category)
 
-    return render_template('category.html')
+    prod = Product.objects.filter(in_sale=True, category=cat)
+
+    return render_template('category.html', products=prod)
+
+@app.route('/product/<string:id_product>')
+def product_page(id_product):
+
+    prod = Product.objects.get(id=id_product)
+
+    return render_template('product.html', product=prod)
+
+@app.route('/admin')
+def admin_page():
+    return render_template('admin.html')
+
+@app.route('/add_category')
+def add_category_page():
+    return render_template('add_category.html')
+
+@app.route('/add_product')
+def add_product_page():
+
+    cat = Category.objects.all()
+
+    return render_template('add_product.html', category=cat)
 
 
+@app.route('/add_cat', methods=['POST'])
+def add_category():
+
+    cat = Category.objects.create(**dict(request.form))
+
+    return render_template('/add_category.html', added_category=cat)
+
+
+@app.route('/add_prod', methods=['POST'])
+def add_product():
+    
+    cat = Category.objects.all()
+    prod = Product.objects.create(**dict(request.form))
+
+    return render_template('/add_product.html', added_product=prod, category=cat)
 
 if __name__ == '__main__':
     app.run(debug=True)
