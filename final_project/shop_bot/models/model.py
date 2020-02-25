@@ -15,42 +15,69 @@ class User(Document):
     phone_number = StringField(max_length=20)
     email = EmailField()
     state = StringField(choises=STATES)
+    step = IntField(max_length=10, default=0)
 
     @classmethod
     def create_user(cls, user_id):
-        print('Save User')
-        try:
+
+        if not cls.objects.get(telegram_id=user_id):
             cls.objects.create(telegram_id=user_id)
-        except Exception as e:
-            print('User')
-            print(e)
+            print('Save User')
+        # try:
+        #     cls.objects.create(telegram_id=user_id)
+        # except Exception as e:
+        #     print('User')
+        #     print(e)
 
     @classmethod
     def get_user(cls, user_id):
         return cls.objects.get(telegram_id=user_id)
+
+    @classmethod
+    def update_user(cls, user_id, **kwargs):
+        user = cls.get_user(user_id)
+        user.update(**kwargs)
+
+    @classmethod
+    def set_step_checkout(cls, user_id, step):
+        user = cls.get_user(user_id)
+        user.step = step
+        user.save()
+
+    @classmethod
+    def get_step(cls, user_id):
+        user = cls.get_user(user_id)
+        return user.step
 
 class Cart(Document):
     user = ReferenceField(User)
     is_archived = BooleanField(default=False)
 
     @classmethod
-    def create_cart(cls, user_id):
-        user = User.objects.get(telegram_id=user_id)
-        try:
-            cls.objects.create(user=user)
-        except Exception as e:
-            print('Cart')
-            print(e)
-
-    @classmethod
     def get_or_create_cart(cls, user_id):
         user = User.objects.get(telegram_id=user_id)
-        cart = cls.objects.get(user=user, is_archived=False) # pri start sozdat Cart
+        cart = cls.objects.filter(user=user, is_archived=False) # pri start sozdat Cart
 
         if not cart:
             cart = cls.objects.create(user=user)
 
         return cart
+
+    @classmethod
+    def archive_cart(cls, user_id):
+        cart = cls.get_cart(user_id)
+        cart.is_archived = True
+        cart.save()
+
+    @classmethod
+    def get_archive_cart(cls, user_id):
+        user = User.objects.get(telegram_id=user_id)
+        return cls.objects.filter(user=user, is_archived=True)
+
+    @classmethod
+    def get_archive_cart_by_id(cls, user_id, id_cart):
+        user = User.objects.get(telegram_id=user_id)
+        return cls.objects.get(user=user, id=id_cart, is_archived=True)
 
     @classmethod
     def get_cart(cls, user_id):

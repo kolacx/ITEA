@@ -33,7 +33,7 @@ def webhook():
 @bot.message_handler(commands=['start'])
 def start(message):
     User.create_user(str(message.chat.id))
-    Cart.create_cart(str(message.chat.id))
+    Cart.get_or_create_cart(str(message.chat.id))
     bot.send_start(message.chat.id)
 
 
@@ -78,7 +78,54 @@ def add_to_card(call):
 def get_root_category(call):
     print('get_Cart')
 
-    bot.show_cart(str(call.from_user.id), 'Выберите категорию')
+    bot.show_cart(str(call.from_user.id))
+
+
+@bot.callback_query_handler(func=lambda call: call.data.split('_')[0] == 'del')
+def del_prod_from_cart(call):
+    print('inline_handler Del product from cart')
+    prod_id = call.data.split('_')[1]
+
+    bot.del_product_from_cart(prod_id, call.id, str(call.from_user.id))
+
+@bot.message_handler(func=lambda message: message.text == 'Оформить заказ')
+def checkout(message):
+
+    bot.checkout_step_1(str(message.from_user.id))
+
+
+@bot.message_handler(func=lambda message: User.get_step(str(message.chat.id)) == 1)
+def save_name_go_step_2(message):
+
+    bot.checkout_step_2(str(message.from_user.id), message.text)
+
+@bot.message_handler(func=lambda message: User.get_step(str(message.chat.id)) == 2)
+def save_name_go_step_3(message):
+
+    bot.checkout_step_3(str(message.from_user.id), message.text)
+
+@bot.message_handler(func=lambda message: User.get_step(str(message.chat.id)) == 3)
+def save_name_go_step_4(message):
+
+    bot.checkout_step_4(str(message.from_user.id), message.text)
+
+@bot.callback_query_handler(func=lambda call: call.data == START_KB['story'])
+def story_order(call):
+
+    bot.story_order(str(call.from_user.id))
+
+@bot.callback_query_handler(func=lambda call: call.data.split('_')[0] == 'story')
+def show_archive_order(call):
+    id_cart = call.data.split('_')[1]
+
+
+    bot.show_archive_cart(str(call.from_user.id), id_cart)
+
+
+
+
+
+
 
 """
 WEBHOOK_HOST = https://33.46.22.19:8443

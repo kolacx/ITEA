@@ -116,24 +116,123 @@ class TGbot(TeleBot):
             self.answer_inline_query(message_id, results, cache_time=0)
 
 
-    def show_cart(self, user_id, text, product_loockup='product', force_send=True):
+    def show_cart(self, user_id, del_product_loockup='del'):
 
         user = User.get_user(user_id)
         cart = Cart.get_cart(user_id)
 
         cart_product = cart.get_cart_products()
 
-        if not force_send:
-            return kb
+        item_f = cart_product.item_frequencies('product')
 
-        for pr in cart_product:
+        kb2 = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
+        b2 = [types.KeyboardButton('Оформить заказ')]
+        kb2.add(*b2)
 
-            kb = types.InlineKeyboardMarkup(row_width=2)
+        if item_f:
 
-            buttons = [
-                types.InlineKeyboardButton(text=pr.title, callback_data=f'{product_loockup}_{pr.id}')
-            ]
+            for p_id, s in item_f.items():
 
-            kb.add(*buttons)
+                pr = Product.get_product(id=p_id)
 
-            self.send_message(user_id, text, reply_markup=kb)
+                text = (f'{pr.title} \n{pr.description} \n{pr.category.title} \nCount: {s}')
+
+                kb = types.InlineKeyboardMarkup(row_width=1)
+
+                buttons = [
+                    types.InlineKeyboardButton(text='Удалить товар с корзины', callback_data=f'{del_product_loockup}_{pr.id}')
+                ]
+
+                kb.add(*buttons)
+
+
+                self.send_message(user_id, text, reply_markup=kb)
+
+            self.send_message(user_id, 'Чтобы купить нажмите на кнопку "Оформить заказ"', reply_markup=kb2)
+        else:
+
+            self.send_message(user_id, 'Ваша корзина пуста')
+
+            
+
+
+    def del_product_from_cart(self, prod_id, message_id, user_id):
+
+        user = User.get_user(user_id)
+        cart = Cart.get_cart(user_id)
+        cart.delete_product_from_cart(prod_id)
+
+        self.answer_callback_query(message_id, "Товар удален", show_alert=True)
+
+        self.send_message(user_id, 'Ваша корзина')
+
+        self.show_cart(user_id)
+
+    def checkout_step_1(self, user_id):
+
+        User.set_step_checkout(user_id, 1)
+
+        self.send_message(user_id, 'Введите ваше Имя')
+
+    def checkout_step_2(self, user_id, response_name):
+
+        User.update_user(user_id, username=response_name)
+        User.set_step_checkout(user_id, 2)
+
+        self.send_message(user_id, 'Введите ваше Телефон (0631234567)')
+
+    def checkout_step_3(self, user_id, response_phone):
+
+        User.update_user(user_id, phone_number=response_phone)
+        User.set_step_checkout(user_id, 3)
+
+        self.send_message(user_id, 'Введите ваш Емейл')
+
+    def checkout_step_4(self, user_id, response_email):
+
+        User.update_user(user_id, email=response_email)
+        User.set_step_checkout(user_id, 4)
+
+        Cart.archive_cart(user_id)
+
+        # For Test
+        user = User.get_user(user_id)
+
+        mes = (f'Вот что ты ввел \n'
+                f'Name: {user.username} \n'
+                f'Phone: {user.phone_number} \n'
+                f'email: {user.email} \n'
+                )
+
+        self.send_message(user_id, 'Заказ оформлен. С вами свяжется наш Менеджер')
+        self.send_message(user_id, mes)
+
+
+    def story_order(self, user_id, story_order_lookup='story'):
+
+        cart = Cart.get_archive_cart(user_id)
+
+        kb = types.InlineKeyboardMarkup()
+        buttons = [
+            types.InlineKeyboardButton(text=f'Корзина {i}', callback_data=f'{story_order_lookup}_{str(c.id)}') for i, c in enumerate(cart)
+        ]
+
+        kb.add(*buttons)
+
+        self.send_message(user_id, 'Ваша история заказов', reply_markup=kb)
+
+
+    def show_archive_cart(self, user_id, id_cart):
+
+        cart = Cart.get_archive_cart_by_id(user_id, id_cart)
+        cart_product = cart.get_cart_products()
+
+        item_f = cart_product.item_frequencies('product')
+
+        for p_id, s in item_f.items():
+
+            pr = Product.get_product(id=p_id)
+
+            text = (f'{pr.title} \n{pr.description} \n{pr.category.title} \nCount: {s}')
+
+            self.send_message(user_id, text)
