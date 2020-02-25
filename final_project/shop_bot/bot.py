@@ -220,14 +220,19 @@ class TGbot(TeleBot):
 
         cart = Cart.get_archive_cart(user_id)
 
-        kb = types.InlineKeyboardMarkup()
-        buttons = [
-            types.InlineKeyboardButton(text=f'Корзина {i}', callback_data=f'{story_order_lookup}_{str(c.id)}') for i, c in enumerate(cart)
-        ]
+        if cart:
 
-        kb.add(*buttons)
+            kb = types.InlineKeyboardMarkup()
+            buttons = [
+                types.InlineKeyboardButton(text=f'Корзина {i}', callback_data=f'{story_order_lookup}_{str(c.id)}') for i, c in enumerate(cart)
+            ]
 
-        self.send_message(user_id, 'Ваша история заказов', reply_markup=kb)
+            kb.add(*buttons)
+
+            self.send_message(user_id, 'Ваша история заказов', reply_markup=kb)
+        else:
+
+            self.send_message(user_id, 'Ваша история заказов Пуста')
 
 
     def show_archive_cart(self, user_id, id_cart):
