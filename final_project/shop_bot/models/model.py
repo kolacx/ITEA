@@ -20,14 +20,14 @@ class User(Document):
     @classmethod
     def create_user(cls, user_id):
 
-        if not cls.objects.get(telegram_id=user_id):
-            cls.objects.create(telegram_id=user_id)
-            print('Save User')
-        # try:
+        # if not cls.objects.get(telegram_id=user_id):
         #     cls.objects.create(telegram_id=user_id)
-        # except Exception as e:
-        #     print('User')
-        #     print(e)
+        #     print('Save User')
+        try:
+            cls.objects.create(telegram_id=user_id)
+        except Exception as e:
+            print('User')
+            print(e)
 
     @classmethod
     def get_user(cls, user_id):
