@@ -60,6 +60,15 @@ def category(query):
     bot.subcategories_or_products(category_id, query.id, query.from_user.id, 'Выберите подкатегорию' )
 
 
+# @bot.callback_query_handler(func=lambda call: call.data.split('_')[0] == 'back')
+# def back_category(call):
+#     print('inline_handler Category BACK')
+#     category_id = call.data.split('_')[1]
+
+#     bot.subcategories_or_products(category_id, call.message.message_id, call.message.chat.id, 'Выберите подкатегорию' )
+
+
+
 @bot.callback_query_handler(func=lambda call: call.data.split('_')[0] == 'product')
 def add_to_card(call):
     print('Add to Card')

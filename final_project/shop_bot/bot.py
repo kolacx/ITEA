@@ -73,11 +73,19 @@ class TGbot(TeleBot):
                         types.InlineKeyboardButton(text=cat.title, callback_data=f'{category_loockup}_{cat.id}')  for cat in category.subcategories
                     ]
 
+                    # back = types.InlineKeyboardButton(text='Назад', callback_data=f'{category_loockup}_{category.id}')
+
+                    # buttons.append(back)
+
                 # Иначе будем отправлять кнопки с switch_inline_query_current_chat
                 else:
                     buttons = [
                         types.InlineKeyboardButton(text=cat.title, switch_inline_query_current_chat=f'{category_loockup}_{cat.id}') for cat in category.subcategories
                     ]
+
+                    # back = types.InlineKeyboardButton(text='Назад', callback_data=f'{category_loockup}_{category.id}')
+
+                    # buttons.append(back)
 
             # Добавляем все созданные кнопки
             kb.add(*buttons)
