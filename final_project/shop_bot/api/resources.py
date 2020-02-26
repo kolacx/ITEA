@@ -48,10 +48,12 @@ class SubCategoryResource(Resource):
 
             sub_cat = Category(**request.get_json()).save()
 
+            sub_cat.reload()
+
             cat.add_subcategory(sub_cat)
 
             return CategorySchema().dump(cat)
-            
+
         except Exception as e:
             return str(e)
 
