@@ -39,6 +39,23 @@ class CategoryResource(Resource):
         except Exception as e:
             return str(e)
 
+class SubCategoryResource(Resource):
+
+    def post(self, cat_id):
+
+        try:
+            cat = Category.objects.get(id=cat_id)
+
+            sub_cat = Category(**request.get_json()).save()
+
+            cat.add_subcategory(sub_cat)
+
+            return CategorySchema().dump(cat)
+            
+        except Exception as e:
+            return str(e)
+
+
 
 class ProductResource(Resource):
 
